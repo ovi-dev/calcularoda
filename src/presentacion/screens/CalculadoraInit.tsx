@@ -22,7 +22,9 @@ const CalculadoraInit = () => {
     operacionDividir,
     operacionMultiplicar,
     operacionRestar,
-    operacionSumar } = useCalculadora()
+    operacionSumar, 
+    resultadoCalculadora, 
+    } = useCalculadora()
 
   return (
     <View style={styles.contenedorCalcu}>
@@ -77,7 +79,7 @@ const CalculadoraInit = () => {
       <View style={styles.row}>
         <Boton onPress={() => pulsarNumero('0')} label='0' color={colores.darkGray} dobleBoton />
         <Boton onPress={() => pulsarNumero('.')} label='.' color={colores.darkGray} />
-        <Boton onPress={() => operacionSumar()} label='=' color={colores.orange} />
+        <Boton onPress={resultadoCalculadora} label='=' color={colores.orange} />
       </View>
 
 

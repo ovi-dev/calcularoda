@@ -1,10 +1,10 @@
 import { useRef, useState } from "react"
 
 enum Operador {
-  sumar,
-  restar,
-  multiplicar,
-  dividir
+  sumar = '+',
+  restar = '-',
+  multiplicar ='x',
+  dividir = '÷'
 }
 
 
@@ -128,6 +128,44 @@ const useCalculadora = () => {
 
 
 
+  // calculos de la calculadora + - x / 
+  const resultadoCalculadora = () => {
+
+    const num1 = Number(numero)
+    
+    const num2 = Number(numeroPrevio)
+  
+  switch (lasOperaciones.current) {
+  
+    case  Operador.sumar:
+    setNumero(`${ num1 + num2}`)
+    
+    break;
+    case  Operador.restar:
+    setNumero(`${ num2 - num1}`)
+    
+    break;
+    case  Operador.dividir:
+    setNumero(`${ num2 / num1}`)
+    
+    break;
+    case  Operador.multiplicar:
+    setNumero(`${ num1 * num2}`)
+    
+    break;
+  
+  default:
+    throw new Error("No Valido !!");
+    
+  }
+
+  setnumeroPrevio('0')
+
+  }
+
+        
+
+
 
 
 
@@ -145,8 +183,8 @@ const useCalculadora = () => {
     operacionDividir,
     operacionMultiplicar,
     operacionRestar,
-    operacionSumar
-
+    operacionSumar,
+    resultadoCalculadora
 
 
   }
