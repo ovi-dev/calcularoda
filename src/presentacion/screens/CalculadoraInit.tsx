@@ -14,6 +14,7 @@ const CalculadoraInit = () => {
   const { 
     numero,
     numeroPrevio,
+    formula,
     
     pulsarNumero,
     borrar,
@@ -37,14 +38,22 @@ const CalculadoraInit = () => {
 
           //el texto se adapta a una sola linea volviendose mas pequena 
           numberOfLines={1}
-          style={styles.resultado}> {numero}</Text>
+          style={styles.resultado}> {formula}</Text>
+          {
+            ( formula === numeroPrevio)
+            ? <Text style={ styles.subResultado}></Text> : (
+              <Text adjustsFontSizeToFit
+              numberOfLines={ 1}
+              style={ styles.subResultado}>{numeroPrevio}</Text>
+            )
+          }
 
 
-        <Text 
+        {/* <Text 
         adjustsFontSizeToFit
         numberOfLines={1}   
                                   // para mantener en blanco la linea de abajo (numeroPrevio === '0' ? ' ' : numeroPrevio)        
-        style={styles.resultado}> {(numeroPrevio === '0' ? ' ' : numeroPrevio)} </Text>
+        style={styles.resultado}> {(numeroPrevio === '0' ? ' ' : numeroPrevio)} </Text> */}
 
       </View>
 

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 enum Operador {
   sumar = '+',
@@ -7,24 +7,52 @@ enum Operador {
   dividir = '÷'
 }
 
-
 const useCalculadora = () => {
+
+  // crear una formula para cambiar las apariencias de la calvculadoras 
+  // 
 
   const [numero, setNumero] = useState('0')
   const [numeroPrevio, setnumeroPrevio] = useState('0')
-
-
   const lasOperaciones = useRef<Operador>()
+  
+  // formula elabora los arreglos necesarios para que aparezca en pantalla los simbolos + - X
+  const [formula, setformula] = useState('')
 
+  // espera el cambio en la formula se pregunta si hay algo operaciones   
+  useEffect(() => {
+
+    // entonces con un estring vacio en su primera posicion concatena lo marcado con los simbolos y resultado
+    if (lasOperaciones.current) {
+      const segundaFormula = formula.split( ' ')[0]
+      setformula( `${segundaFormula} ${lasOperaciones.current} ${ numero}`)
+    }
+    // caso contrari si no tiene nada se coloca el valor anterior 
+    else {
+
+      setformula(numero)
+    }
+  
+  
+  }, [numero])
+
+  // que aparezca en la linea de abajo de la calculadora el resultado sin darle =
+  // lo que se busca es disminuir lo menos posiblo los efectos usaremos 
+  useEffect(() => {
+    const subResultado = subCalculo()
+    setnumeroPrevio(`${subResultado}`)
+  }, [formula])
 
 
   // funcion para borrar la calculadora y poner a cero
   const borrar = () => {
     setNumero('0')
     setnumeroPrevio('0')
+    lasOperaciones.current = undefined
+    setformula('')
   }
 
-  // funbcion para borrar numeros de la pantalla con el 'del'
+  // funbcion para borrar numeros de pantalla con el 'del'
   const borrarOperacion = () => {
     let asignado = ''
     let numeroTemporal = numero
@@ -34,7 +62,7 @@ const useCalculadora = () => {
       numeroTemporal = numero.substring(1)
 
     }
-    // borra el nu,ero de derecha a izquierda 
+    // borra el numero de derecha a izquierda 
     if (numeroTemporal.length > 1) { // recorre el numero temporal mayor a 1
       return setNumero(asignado + numeroTemporal.slice(0, -1)) //devuelve el set slice() extrae una sección de una cadena y devuelve una cadena nueva.
     }
@@ -94,10 +122,13 @@ const useCalculadora = () => {
   }
 
 
-  //verificar operaciones .0 que no pueda hacer operaciones
+  //verificar operaciones .0 que no pueda hacer operaciones CALCULATERESULT
   const verificarcion = () => {
+    resultadoCalculadora()
+       // en la condicion tiene elcalculo calculadora 
+
     if (numero.endsWith('.')) {
-      setnumeroPrevio(numero.slice(0, 1))
+      setnumeroPrevio(numero.slice(0, -1))
     }
     else {
       setnumeroPrevio(numero)
@@ -130,49 +161,58 @@ const useCalculadora = () => {
 
   // calculos de la calculadora + - x / 
   const resultadoCalculadora = () => {
-
-    const num1 = Number(numero)
+    const resultado = subCalculo()
+    setformula( `${resultado}`)
+    lasOperaciones.current = undefined
     
-    const num2 = Number(numeroPrevio)
-  
+    setnumeroPrevio('0')
+  }
+
+  const subCalculo = ():Number => {
+
+    const [ primerValor, operacion, segundoValor] = formula.split( ' ' )
+     const num1 = Number(primerValor)
+    const num2 = Number(segundoValor)
+    // const num1 = Number(numero)
+    // const num2 = Number(numeroPrevio)
+
+    // el isNan es un metodo. si el resultado mo es num2 uno devuelve e; num1
+    if (isNaN(num2) ) return num1
+
+          //se puede cambiar aqui el lasOperaciones por operacion de arriba
   switch (lasOperaciones.current) {
   
     case  Operador.sumar:
-    setNumero(`${ num1 + num2}`)
+    // setNumero(`${ num1 + num2}`)
+    return num1 + num2
     
-    break;
+    // break;
     case  Operador.restar:
-    setNumero(`${ num2 - num1}`)
+    // setNumero(`${ num2 - num1}`)
+    return num1 - num2
     
-    break;
+    // break;
     case  Operador.dividir:
-    setNumero(`${ num2 / num1}`)
+    // setNumero(`${ num2 / num1}`)
+    return num1 / num2
     
-    break;
+    // break;
     case  Operador.multiplicar:
-    setNumero(`${ num1 * num2}`)
+    // setNumero(`${ num1 * num2}`)
+    return num1 * num2
     
-    break;
+    // break;
   
   default:
     throw new Error("No Valido !!");
-    
   }
-
-  setnumeroPrevio('0')
-
   }
-
-        
-
-
-
-
 
   return {
     // properties 
     numero,
     numeroPrevio,
+    formula,
 
 
     //Methods estos son metodos 
