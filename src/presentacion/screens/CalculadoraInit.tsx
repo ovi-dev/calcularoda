@@ -68,7 +68,7 @@ const CalculadoraInit = () => {
         <Boton onPress={() => pulsarNumero('7')} label='7' color={colores.darkGray} />
         <Boton onPress={() => pulsarNumero('8')} label='8' color={colores.darkGray} />
         <Boton onPress={() => pulsarNumero('9')} label='9' color={colores.darkGray} />
-        <Boton onPress={() => operacionMultiplicar()} label='X' color={colores.orange} />
+        <Boton onPress={() => operacionMultiplicar()} label='x' color={colores.orange} />
       </View>
 
       <View style={styles.row}>
